@@ -72,4 +72,72 @@ node* SplayTree::Splay( int key, node* root ) {
   root->right = head.left;
   return root;
 }
-     
+
+node* SplayTree::Insert( int key, node* root ) {
+  node* temp = new node;
+  temp->key = key;
+  temp->left = NULL;
+  temp->right = NULL;
+
+  if(!root) {
+    root = temp;
+    temp = NULL;
+    return root;
+  }
+
+  root = Splay( key, root );
+
+  if( key < root->key ) {
+    temp->left = root->left;
+    temp->right = root;
+    root->left = NULL;
+    root = temp;
+  }
+  else if( key > root->key ) {
+    temp->right = root->right;
+    temp->left = root;
+    root->right = NULL;
+    root = temp;
+  }
+  else
+    return root;
+
+  temp = NULL;
+  return root;
+}
+
+node* SplayTree::Delete( int key, node* root ) {
+  node* temp;
+  if(!root)
+    return NULL;
+  root = Splay( key, root );
+  if( key != root->key )
+    return root;
+  else {
+    if( !root->left ) {
+      temp = root;
+      root = root->right;
+    }
+    else {
+      temp = root;
+      root = Splay(key, root->left);
+      root->right = temp->right;
+    }
+
+    delete temp;
+    return root;
+  }
+}
+
+node* SplayTree::Find( int key, node* root ) {
+ node* temp = Splay( key, root );
+ if( temp->key = key )
+   cout << "item " << key << "found" << endl;
+ else
+   cout << "item " << key << "not found" << endl;
+
+ delete temp;
+ return Splay( key, root );
+}
+
+  
