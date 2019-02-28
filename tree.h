@@ -17,8 +17,9 @@ class SplayTree {
   node* Insert( int key, node* root );
   node* Delete( int key, node* root );
   node* Find( int key, node* root );
+  void print( node* root );
 
  private:
-  node root;
+  int height( node* root );
 
 };

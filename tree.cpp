@@ -1,6 +1,7 @@
 #include "tree.h"
 #include <iostream>
 #include <cstdlib>
+#include <queue>
 using namespace std;
 
 SplayTree::SplayTree(){
@@ -70,6 +71,7 @@ node* SplayTree::Splay( int key, node* root ) {
   min->left = root->right;
   root->left = head.right;
   root->right = head.left;
+  
   return root;
 }
 
@@ -80,6 +82,7 @@ node* SplayTree::Insert( int key, node* root ) {
   temp->right = NULL;
 
   if(!root) {
+    cout << "item " << key << " inserted" << endl;
     root = temp;
     temp = NULL;
     return root;
@@ -92,15 +95,19 @@ node* SplayTree::Insert( int key, node* root ) {
     temp->right = root;
     root->left = NULL;
     root = temp;
+    cout << "item " << key << " inserted" << endl;
   }
   else if( key > root->key ) {
     temp->right = root->right;
     temp->left = root;
     root->right = NULL;
     root = temp;
+    cout << "item " <<  key << " inserted" << endl;
   }
-  else
+  else {
+    cout << "item " << key << " not inserted; already present" << endl;
     return root;
+  }
 
   temp = NULL;
   return root;
@@ -111,9 +118,14 @@ node* SplayTree::Delete( int key, node* root ) {
   if(!root)
     return NULL;
   root = Splay( key, root );
-  if( key != root->key )
+  if( key != root->key ) {
+    cout << "item " << key << " not deleted; not present" << endl;
     return root;
+  }
   else {
+    
+    cout << "item " << key << " deleted" << endl;
+    
     if( !root->left ) {
       temp = root;
       root = root->right;
@@ -130,14 +142,53 @@ node* SplayTree::Delete( int key, node* root ) {
 }
 
 node* SplayTree::Find( int key, node* root ) {
- node* temp = Splay( key, root );
- if( temp->key = key )
-   cout << "item " << key << "found" << endl;
- else
-   cout << "item " << key << "not found" << endl;
-
- delete temp;
  return Splay( key, root );
 }
 
+int SplayTree::height( node* root ) {
+  if( !root )
+    return 0;
+  else {
+    int lefth = height(root->left);
+    int righth = height(root->right);
+
+    if( lefth > righth )
+      return( lefth + 1 );
+    else
+      return( righth +1 );
+  }
+}
+		      
+void SplayTree::print( node* root ) {
+  if( !root )
+    return;
+
+  queue< node* > z;
+  z.push(root);
+
+  int first = 0;
+  int counter = 0;
   
+  while(!z.empty()) {
+    counter = z.size();
+
+    while(counter > 0) {
+      node* temp = z.front();
+      if( first == 0 )
+	cout << temp->key;
+      else
+	cout << ", " << temp->key;
+      z.pop();
+      
+      if(temp->left != NULL)
+	z.push(temp->left);
+      if(temp->right != NULL)
+	z.push(temp->right);
+
+      counter--;
+      first++;
+    }
+    cout << endl;
+    first = 0;
+  }
+}
