@@ -1,5 +1,6 @@
-CSIL Login: dongjunkim
+1) Programming Language: C++
 
-UCSB Email: dongjunkim@ucsb.edu
+2) CSIL Login: dongjunkim
+   UCSB Email: dongjunkim@ucsb.edu
 
 Implementation of a splay tree
