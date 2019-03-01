@@ -5,7 +5,7 @@
 int main() {
 
   SplayTree t;
-  int operations;
+  std::string operations = "";
   std::string next;
   std::cin >> operations;
   node* root = NULL;
@@ -18,7 +18,7 @@ int main() {
     else if( next == "find" ) {
       std::cin >> next;
       root = t.Find( std::stoi(next), root );
-      if( root->key != std::stoi(next) )
+      if( root == NULL || root->key != std::stoi(next) )
 	std::cout << "item " << next << " not found" << endl;
       else
 	std::cout << "item " << next << " found" << endl;
@@ -29,6 +29,8 @@ int main() {
     }
     else
       t.print(root);
+
+    //    t.print(root);
   }
 	  
   return 0;

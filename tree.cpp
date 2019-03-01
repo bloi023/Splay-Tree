@@ -21,9 +21,51 @@ node* SplayTree::lrotate( node* a ) {
   return b;
 }
 
+/*
 node* SplayTree::Splay( int key, node* root ) {
   if(!root)
-    return NULL;
+    return root;
+  if( root->key == key )
+    return root;
+
+  if(root->key > key) {
+    if( root->left->key > key ) {
+      root->left->left = Splay( key, root->left->left );
+      root = rrotate( root );
+    }
+    else if( root->left->key < key ) {
+      root->left->right = Splay( key, root->left->right );
+      if(root->left->right != NULL)
+	root->left=lrotate(root->left);
+    }
+
+    return (root->left == NULL)? root: rrotate(root);
+  }
+  else {
+    if(root->right == NULL)
+      return root;
+    if(root->right->key > key ) {
+      root->right->left = Splay(key, root->right->left);
+      if(root->right->left != NULL )
+	root->right = rrotate(root->right);
+    }
+    else if (root->right->key < key ) {
+      root->right->right = Splay(key, root->right->right);
+      root = lrotate(root);
+    }
+
+    return (root->right == NULL)? root: lrotate(root);
+  }
+}
+				 
+
+*/
+node* SplayTree::Splay( int key, node* root ) {
+  if(!root)
+    return root;
+  if(root->key == key)
+    return root;
+  
   node head;
   head.left = head.right = NULL;
   node* max = &head;
@@ -63,8 +105,10 @@ node* SplayTree::Splay( int key, node* root ) {
       root = root->right;
       max->right = NULL;
     }
-    else
+    else {
       done = true;
+      break;
+    }
   }
 
   max->right = root->left;
@@ -74,6 +118,7 @@ node* SplayTree::Splay( int key, node* root ) {
   
   return root;
 }
+
 
 node* SplayTree::Insert( int key, node* root ) {
   node* temp = new node;
@@ -115,8 +160,10 @@ node* SplayTree::Insert( int key, node* root ) {
 
 node* SplayTree::Delete( int key, node* root ) {
   node* temp;
-  if(!root)
+  if(!root) {
+    cout << "item " << key << " not deleted; not present" << endl;
     return NULL;
+  }
   root = Splay( key, root );
   if( key != root->key ) {
     cout << "item " << key << " not deleted; not present" << endl;
